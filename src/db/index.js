@@ -3,7 +3,7 @@ import { DB_NAME } from "../constants.js";
 
 const connectDB = async () => {
     try {
-        const dbURI = `mongodb+srv://ayush2:ayush22@cluster0.ntee4.mongodb.net/${DB_NAME}`;
+        const dbURI = `mongodb+srv://ayush23:ayush232@cluster0.ntee4.mongodb.net/}`;
         console.log(`Connecting to MongoDB with URI: ${dbURI}`);
         const connectionInstance = await mongoose.connect(dbURI, {
             useNewUrlParser: true,

@@ -15,4 +15,20 @@ app.use(express.static("public"))
 app.use(cookieParser()) // we can access cookies and perform CRUD operation on these cookies
 
 
+//routes
+
+import userRouter from "./routes/user.routes.js";
+
+
+
+// routes Decleration
+// app.use("/user",userRouter)
+
+app.use("/api/v1/users",userRouter)
+
+
+// http://localhost:8000/api/vl/users/register
+
+
+
 export { app }
