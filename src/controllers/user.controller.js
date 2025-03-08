@@ -4,6 +4,22 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+const genAccessTokandRefreshTok=async(userId){
+    try {
+        const user=await User.findById(userId);
+        const AccessToken=user.generateAccessToken();
+        const RefreshToken=user.generateRefreshToken();
+
+        user.RefreshToken=RefreshToken;
+        await user.save({validateBeforeSave: false})
+
+        return {AccessToken,RefreshToken}
+
+    } catch (error) {
+        throw new ApiError(500,"error in refresh token or access token")
+    }
+}
+
 export const registerUser = asyncHandler(async (req, res) => {
     const { fullName, email, username, password } = req.body;
 
@@ -22,7 +38,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     const existingUser = await User.findOne({
         $or: [{ username: username.toLowerCase() }, { email: email.toLowerCase() }]
     });
-
+    // either email or username
     if (existingUser) {
         throw new ApiError(409, "User already exists");
     }
@@ -67,5 +83,54 @@ export const registerUser = asyncHandler(async (req, res) => {
     return res.status(201).json(
         new ApiResponse(201, createdUser, "User registered successfully")
     );
+});
+ 
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+
+export const loginUser = asyncHandler(async (req, res) => {
+
+   // req body-> data
+   // username or email
+   // find username or email
+   // check password
+   // generate access and Refresh token
+   // send cookie
+   // give response login succesfull
+
+
+
+
+
+    const { email, username ,password } = req.body;
+
+    // Check if both fields are provided
+
+    if( !username || !email){
+        throw new ApiError(400, "username or email is required");
+    }
+    const findUser= await User.findOne({
+        $or: [{username},{email}]
+    })
+    
+    if (!findUser) {
+        throw new ApiError(404, "User not found");
+    }
+     
+    // Compare the password
+    const isPasswordValid = await findUser.isPasswordCorrect(password);
+ 
+
+    if (!isPasswordValid) {
+        throw new ApiError(401, "Invalid credentials");
+    }
+
+    // Generate JWT token
+    const {accestoken, refrestoken} = await genAccessTokandRefreshTok(user._id)
+
+    // send in cookies
+
+    res.status(200).json({ message: "Login successful", token });
 });
 

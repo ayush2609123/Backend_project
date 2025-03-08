@@ -22,6 +22,7 @@ import userRouter from "./routes/user.routes.js";
 
 
 // routes Decleration
+// need middleware
 // app.use("/user",userRouter)
 
 app.use("/api/v1/users",userRouter)
@@ -30,5 +31,5 @@ app.use("/api/v1/users",userRouter)
 // http://localhost:8000/api/vl/users/register
 
 
-
+  
 export { app }
